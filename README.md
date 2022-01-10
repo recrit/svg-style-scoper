@@ -1,2 +1,2 @@
 # svg-style-scoper
-Scope the styles within an SVG to avoid conflicts with other SVGs and page element styles.
+Scope the styles within the SVG markup to avoid SVG the styles affecting other SVGs or other elements on the page. 

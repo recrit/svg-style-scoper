@@ -1,0 +1,15 @@
+{
+    "name": "recrit/svg-style-scoper",
+    "description": "Scope the styles within the SVG markup to avoid SVG the styles affecting other SVGs or other elements on the page.",
+    "type": "library",
+    "require": {
+        "php": "^7.0 || ^8.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Recrit\\SvgStyleScoper\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
