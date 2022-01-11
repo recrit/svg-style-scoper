@@ -1,6 +1,6 @@
 <?php
 
-namespace Recrit\svgStyleScoper;
+namespace Recrit\SvgStyleScoper;
 
 /**
  * Scopes the styles of an SVG by altering the CSS selectors.
