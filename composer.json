@@ -13,6 +13,6 @@
     },
     "minimum-stability": "stable",
     "suggest": {
-        "enshrined/svg-sanitize": "SVG sanitizer for PHP",
+        "enshrined/svg-sanitize": "SVG sanitizer for PHP"
     }
 }
