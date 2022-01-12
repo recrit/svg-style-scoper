@@ -33,17 +33,24 @@ class SvgStyleScoper {
   /**
    * Scope the SVG styles.
    *
-   * @param string $svg_markup
+   * @param string|null $svg_markup
    *   The SVG markup.
    *
    * @return string
    *   The SVG markup with the styles scoped.
    */
-  public static function scopeStyles(string $svg_markup) {
+  public static function scopeStyles(?string $svg_markup) {
+    // Exit early if there is nothing to process.
+    if (empty($svg_markup)) {
+      return '';
+    }
+
+    // Exit early if there are no styles to process.
     if (stripos($svg_markup, '</style>') === FALSE) {
       return $svg_markup;
     }
 
+    // Process each SVG tag.
     $svg_scoped = preg_replace_callback('@\<svg[^\>]*\>.+\<\/svg\>@Uis', function ($svg_match) {
       $id = static::generateUniqueId($svg_match[0]);
       $attr_replacements = [];
@@ -52,9 +59,12 @@ class SvgStyleScoper {
         '#' => 'id',
       ];
 
-      // Update selectors in all style tags.
+      // Process each STYLE tag.
       $svg_new = preg_replace_callback('@(?<start>\<style[^\>]*\>)(?<style_tag_content>.+)(?<end>\<\/style\>)@Uis', function ($style_tag_match) use (&$attr_replacements, $attr_selector_map, $id) {
+        // Track CSS selectors to replace in all styles.
         $selector_replacements = [];
+
+        // Process each style declaration.
         $styles_new = preg_replace_callback('@(?<selector>[^\{]+)(?<styles>\{[^\}]+\})@', function ($style_match) use (&$attr_replacements, &$style_selector_replacements, $attr_selector_map, $id) {
           // Append ID to the first part of the selector to scope the styles.
           // ID, class, or tag selector.
