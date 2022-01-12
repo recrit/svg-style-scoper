@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345">
+    <style type="text/css">
+        .cls-0 {fill:#FFFFFF;}
+        #svg-12345 .cls-0 {fill:#FF0000;}
+        .cls-1 {fill:#00FF00;}
+        .cls-1 + .cls-x {fill:#0000ff;}
+        .cls-1 + .cls-0 {fill:#000000;}
+        #id-0 {fill: #000000;}
+        path {fill: #000000 !important;}
+        * path {fill: #00FF00 !important;}
+    </style>
+    <style type="text/css">
+        a[title]::before{content:"PWNED";}
+        [title]::before{content:"PWNED";}
+        * h1::before {content:"PWNED";}
+        h1::before {content:"PWNED";}
+    </style>
+    <path class="cls-0" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
+    <circle class="cls-1" cx="10" cy="10" r="2"/>
+    <circle id="id-0" cx="90" cy="90" r="2"/>
+    <circle class="cls-1" cx="90" cy="10" r="2" />
+    <circle class="cls-x" cx="10" cy="90" r="2" />
+</svg>
