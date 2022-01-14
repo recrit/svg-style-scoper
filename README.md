@@ -30,5 +30,5 @@ This library alters the SVG styles so that they only apply to the contents withi
 |2| .cls-1 + .cls-x {} | .cls-1-HASH + .cls-x {} | class="cls-1-HASH" | Replace the class "cls-1" only. |
 |3| .cls-1 .cls-0 {} | .cls-1-HASH .cls-0-HASH {} | class="cls-0-HASH", class="cls-1-HASH" | Replace the class "cls-1" and "cls-0" since "cls-0" was replaced in #1 above. |
 |4| #id-0 {} | #id-0-HASH {} | id="id-0-HASH" | Replace the ID "id-0". |
-|5| path {} | path-HASH {} | none | Bad practice, eliminate the style. |
-|6| * path {} | removed-HASH path {} | none | Bad practice, eliminate the style. |
+|5| path {} | REMOVED | none | Bad practice, eliminate the style. |
+|6| * path {} | REMOVED | none | Bad practice, eliminate the style. |

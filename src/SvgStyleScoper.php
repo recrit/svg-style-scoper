@@ -62,7 +62,7 @@ class SvgStyleScoper {
       // Process each STYLE tag.
       $svg_new = preg_replace_callback('@(?<start>\<style[^\>]*\>)(?<style_tag_content>.+)(?<end>\<\/style\>)@Uis', function ($style_tag_match) use (&$attr_replacements, $attr_selector_map, $id) {
         // Track CSS selectors to replace in all styles.
-        $selector_replacements = [];
+        $style_selector_replacements = [];
 
         // Process each style declaration.
         $styles_new = preg_replace_callback('@(?<selector>[^\{]+)(?<styles>\{[^\}]+\})@', function ($style_match) use (&$attr_replacements, &$style_selector_replacements, $attr_selector_map, $id) {
@@ -74,13 +74,12 @@ class SvgStyleScoper {
           }
 
           if (mb_substr($selector, 0, 1) === '*') {
-            // All selector is not allowed.
-            return preg_replace('@^(\s*)\*@', '$1removed-' . $id, $style_match[0]);
+            // REMOVE - the all selector is not allowed.
+            return '';
           }
-          elseif (preg_match('@^(?<prefix>[\.#\[]{0,1})(?<name>[\w\-]+)@', $selector, $selector_matches)) {
-            // Match the first part of the selector.
-            // Matches "tag", ".class-name", "#id", "[attribute]", or
-            // "tag[attribute]".
+          elseif (preg_match('@^(?<prefix>[\.#])(?<name>[\w\-]+)@', $selector, $selector_matches)) {
+            // Match the first part of the selector for the allowed styles.
+            // Matches ".class-name" and "#id".
             $new_first_selector_name = $selector_matches['name'] . '-' . $id;
             $selector_replacement = $new_first_selector_name;
             if (!empty($selector_matches['prefix'])) {
@@ -98,6 +97,10 @@ class SvgStyleScoper {
 
             // Replace with new selector.
             return $new_full_selector . $style_match['styles'];
+          }
+          else {
+            // Remove - tag name and attribute selectors are not allowed.
+            return '';
           }
 
           // Replace with original match.
