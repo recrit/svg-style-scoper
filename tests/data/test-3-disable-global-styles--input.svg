@@ -1,15 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345">
     <style type="text/css">
         .cls-0 {fill:#FFFFFF;}
-        #svg-12345 .cls-0 {fill:#FF0000;}
-        .cls-1 {fill:#00FF00;}
-        .cls-1 + .cls-x {fill:#0000ff;}
-        .cls-1 + .cls-0 {fill:#000000;}
-        #id-0 {fill: #000000;}
         path {fill: #000000 !important;}
         * path {fill: #00FF00 !important;}
-    </style>
-    <style type="text/css">
         a[title]::before{content:"PWNED";}
         [title]::before{content:"PWNED";}
         * h1::before {content:"PWNED";}

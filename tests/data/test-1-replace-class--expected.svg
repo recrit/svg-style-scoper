@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345">
+    <style type="text/css">
+        .cls-0-373b3d2e524053b033154f3da5cf76d8 {fill:#FFFFFF;}
+        .cls-1-373b3d2e524053b033154f3da5cf76d8 {fill:#00FF00;}
+        .cls-1-373b3d2e524053b033154f3da5cf76d8 + .cls-x {fill:#0000ff;}
+        .cls-1-373b3d2e524053b033154f3da5cf76d8 + .cls-0-373b3d2e524053b033154f3da5cf76d8 {fill:#000000;}
+    </style>
+    <path class="cls-0-373b3d2e524053b033154f3da5cf76d8" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
+    <circle class="cls-1-373b3d2e524053b033154f3da5cf76d8" cx="10" cy="10" r="2"/>
+    <circle id="id-0" cx="90" cy="90" r="2"/>
+    <circle class="cls-1-373b3d2e524053b033154f3da5cf76d8" cx="90" cy="10" r="2" />
+    <circle class="cls-x" cx="10" cy="90" r="2" />
+</svg>
