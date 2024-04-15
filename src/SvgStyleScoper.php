@@ -168,7 +168,7 @@ class SvgStyleScoper {
       }
     }
 
-    $svg_scoped = $dom->saveXML($dom);
+    $svg_scoped = $dom->saveXML($dom->documentElement);
     return $svg_scoped ?: $svg_original;
   }
 
