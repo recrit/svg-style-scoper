@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345-157905ba9f2a82cbfbbbc78f1ddcfb80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345-f8a6bf39b5600a07cf3cc640770f1112">
     <style type="text/css">
-        #svg-12345-157905ba9f2a82cbfbbbc78f1ddcfb80 .cls-0 {fill:#FF0000;}
-        #id-0-157905ba9f2a82cbfbbbc78f1ddcfb80 {fill: #000000;}
+        #svg-12345-f8a6bf39b5600a07cf3cc640770f1112 .cls-0 {fill:#FF0000;}
+        #id-0-f8a6bf39b5600a07cf3cc640770f1112 {fill: #000000;}
     </style>
     <path class="cls-0" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
     <circle class="cls-1" cx="10" cy="10" r="2"/>
-    <circle id="id-0-157905ba9f2a82cbfbbbc78f1ddcfb80" cx="90" cy="90" r="2"/>
-    <circle class="cls-1" cx="90" cy="10" r="2" />
-    <circle class="cls-x" cx="10" cy="90" r="2" />
+    <circle id="id-0-f8a6bf39b5600a07cf3cc640770f1112" cx="90" cy="90" r="2"/>
+    <circle class="cls-1" cx="90" cy="10" r="2"/>
+    <circle class="cls-x" cx="10" cy="90" r="2"/>
 </svg>

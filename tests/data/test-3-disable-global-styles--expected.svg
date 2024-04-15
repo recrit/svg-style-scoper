@@ -1,10 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345">
-    <style type="text/css">
-        .cls-0-6ffd25a8e533b2158e6ac01c95a6edde {fill:#FFFFFF;}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345-72b5a826b49ca563a051d7035a5cb898">
+    <style type="text/css">.cls-0-72b5a826b49ca563a051d7035a5cb898 {fill:#FFFFFF;}
     </style>
-    <path class="cls-0-6ffd25a8e533b2158e6ac01c95a6edde" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
+    <path class="cls-0-72b5a826b49ca563a051d7035a5cb898" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
     <circle class="cls-1" cx="10" cy="10" r="2"/>
-    <circle id="id-0" cx="90" cy="90" r="2"/>
-    <circle class="cls-1" cx="90" cy="10" r="2" />
-    <circle class="cls-x" cx="10" cy="90" r="2" />
+    <circle id="id-0-72b5a826b49ca563a051d7035a5cb898" cx="90" cy="90" r="2"/>
+    <circle class="cls-1" cx="90" cy="10" r="2"/>
+    <circle class="cls-x" cx="10" cy="90" r="2"/>
 </svg>

@@ -1,13 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345">
-    <style type="text/css">
-        .cls-0-7872acb27a1b92266933511c15be3e21 {fill: #000000 !important;}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" id="svg-12345-ee195d63b1e799605b87673633d31fed">
+    <style type="text/css">.cls-0-ee195d63b1e799605b87673633d31fed {fill: #000000 !important;}
     </style>
-    <style type="text/css">
-        .cls-1-7872acb27a1b92266933511c15be3e21 {fill: #00FF00 !important;}
+    <style type="text/css">.cls-1-ee195d63b1e799605b87673633d31fed {fill: #00FF00 !important;}
     </style>
-    <path class="cls-0-7872acb27a1b92266933511c15be3e21" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
-    <circle class="cls-1-7872acb27a1b92266933511c15be3e21" cx="10" cy="10" r="2"/>
-    <circle id="id-0" cx="90" cy="90" r="2"/>
-    <circle class="cls-1-7872acb27a1b92266933511c15be3e21" cx="90" cy="10" r="2" />
-    <circle class="cls-x" cx="10" cy="90" r="2" />
+    <path class="cls-0-ee195d63b1e799605b87673633d31fed" d="M 10 10 H 90 V 90 H 10 L 10 10"/>
+    <circle class="cls-1-ee195d63b1e799605b87673633d31fed" cx="10" cy="10" r="2"/>
+    <circle id="id-0-ee195d63b1e799605b87673633d31fed" cx="90" cy="90" r="2"/>
+    <circle class="cls-1-ee195d63b1e799605b87673633d31fed" cx="90" cy="10" r="2"/>
+    <circle class="cls-x" cx="10" cy="90" r="2"/>
 </svg>
