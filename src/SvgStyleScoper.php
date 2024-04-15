@@ -39,33 +39,76 @@ class SvgStyleScoper {
    * @return string
    *   The SVG markup with the styles scoped.
    */
-  public static function scopeStyles(?string $svg_markup) {
+  /**
+   * Scope the SVG styles.
+   *
+   * @param string|null $svg_original
+   *   The SVG markup.
+   * @param array $options
+   *   The options for this scoping process.
+   *   - "allow_huge_files" (bool): Set to TRUE to allow huge files.
+   *
+   * @return string
+   *   The SVG markup with the styles scoped.
+   *   Upon any error, the original $svg_original is returned.
+   */
+  public static function scopeStyles(?string $svg_original, array $options = []): string {
     // Exit early if there is nothing to process.
-    if (empty($svg_markup)) {
-      return '';
+    if (empty($svg_original) || !trim($svg_original)) {
+      return $svg_original;
     }
 
-    // Exit early if there are no styles to process.
-    if (stripos($svg_markup, '</style>') === FALSE) {
-      return $svg_markup;
+    $dom = new \DOMDocument();
+    $libxml_errors_previous_value = libxml_use_internal_errors(TRUE);
+    $loaded = @$dom->loadXML($svg_original, !empty($options['allow_huge_files']) ? LIBXML_PARSEHUGE : 0);
+    $libxml_errors = libxml_get_errors();
+    libxml_use_internal_errors($libxml_errors_previous_value);
+    libxml_clear_errors();
+    if (!$loaded || $libxml_errors) {
+      return $svg_original;
     }
 
-    // Process each SVG tag.
-    $svg_scoped = preg_replace_callback('@\<svg[^\>]*\>.+\<\/svg\>@Uis', function ($svg_match) {
-      $id = static::generateUniqueId($svg_match[0]);
-      $attr_replacements = [];
-      $attr_selector_map = [
-        '.' => 'class',
-        '#' => 'id',
-      ];
+    $svg_base_id = static::generateUniqueId($svg_original);
+    $xpath = new \DOMXPath($dom);
+    $svgs = $dom->getElementsByTagName('svg');
+    $id_needs_suffix = $svgs->count() > 1;
+    foreach ($svgs as $s => $svg) {
+      $id_replacements = [];
+      $svg_id = $svg_base_id . ($id_needs_suffix ? "-{$s}" : '');
 
-      // Process each STYLE tag.
-      $svg_new = preg_replace_callback('@(?<start>\<style[^\>]*\>)(?<style_tag_content>.+)(?<end>\<\/style\>)@Uis', function ($style_tag_match) use (&$attr_replacements, $attr_selector_map, $id) {
-        // Track CSS selectors to replace in all styles.
-        $style_selector_replacements = [];
+      $svg_html_id = $svg->getAttribute('id');
+      if ($svg_html_id) {
+        $id_replacements[$svg_html_id] = "{$svg_html_id}-$svg_id";
+        $svg->setAttribute('id', $id_replacements[$svg_html_id]);
+      }
+
+      foreach ($xpath->query('//*[@id]', $svg) as $node_with_id) {
+        if ($node_with_id instanceof \DOMElement && strtoupper($node_with_id->tagName) !== 'SVG') {
+          $node_id = $node_with_id->getAttribute('id');
+          if ($node_id) {
+            $new_node_id = "{$node_id}-{$svg_id}";
+            $node_with_id->setAttribute('id', $new_node_id);
+            $id_replacements[$node_id] = $new_node_id;
+          }
+        }
+      }
+
+      // Process each style tag.
+      foreach ($svg->getElementsByTagName('style') as $style) {
+        if (!$style->nodeValue) {
+          continue;
+        }
+
+        $new_style = $style->nodeValue;
+
+        // Replace IDs.
+        foreach ($id_replacements as $id_original => $id_replacement) {
+          $new_style = str_replace("#{$id_original}", "#{$id_replacement}", $new_style);
+        }
 
         // Process each style declaration.
-        $styles_new = preg_replace_callback('@(?<selector>[^\{]+)(?<styles>\{[^\}]+\})@', function ($style_match) use (&$attr_replacements, &$style_selector_replacements, $attr_selector_map, $id) {
+        $class_replacements = [];
+        $new_style = preg_replace_callback('@(?<selector>[^\{]+)(?<styles>\{[^\}]+\})@U', function ($style_match) use ($svg_id, &$class_replacements) {
           // Append ID to the first part of the selector to scope the styles.
           // ID, class, or tag selector.
           $selector = trim($style_match['selector']);
@@ -73,72 +116,60 @@ class SvgStyleScoper {
             return $style_match[0];
           }
 
+          // Remove the style, the all selector is not allowed.
           if (mb_substr($selector, 0, 1) === '*') {
-            // REMOVE - the all selector is not allowed.
-            return '';
-          }
-          elseif (preg_match('@^(?<prefix>[\.#])(?<name>[\w\-]+)@', $selector, $selector_matches)) {
-            // Match the first part of the selector for the allowed styles.
-            // Matches ".class-name" and "#id".
-            $new_first_selector_name = $selector_matches['name'] . '-' . $id;
-            $selector_replacement = $new_first_selector_name;
-            if (!empty($selector_matches['prefix'])) {
-              $selector_replacement = $selector_matches['prefix'] . $selector_replacement;
-            }
-
-            $new_full_selector = str_replace($selector_matches[0], $selector_replacement, $style_match['selector']);
-
-            // Build attribute replacements.
-            if (!empty($selector_matches['prefix']) &&
-                !empty($attr_selector_map[$selector_matches['prefix']])) {
-              $style_selector_replacements[$selector_matches[0]] = $selector_replacement;
-              $attr_replacements[$selector_matches['prefix']][$selector_matches['name']] = $new_first_selector_name;
-            }
-
-            // Replace with new selector.
-            return $new_full_selector . $style_match['styles'];
-          }
-          else {
-            // Remove - tag name and attribute selectors are not allowed.
             return '';
           }
 
-          // Replace with original match.
-          return $style_match[0];
-        }, $style_tag_match['style_tag_content']);
-
-        // Replace selectors in any nested selectors.
-        // Example:
-        // ".cls-1--HASH .cls-2" converted to  ".cls-1--HASH .cls-2-HASH".
-        foreach ($style_selector_replacements as $style_selector_original => $style_selector_replacement) {
-          $styles_new = preg_replace('@' . preg_quote($style_selector_original, '@') . '([^\w\-])@', $style_selector_replacement . '$1', $styles_new);
-        }
-
-        return $style_tag_match['start'] . $styles_new . $style_tag_match['end'];
-      }, $svg_match[0]);
-
-      // Replace attributes in all element attributes.
-      foreach ($attr_replacements as $attr_suffix => $attr_replacement) {
-        if (empty($attr_selector_map[$attr_suffix])) {
-          continue;
-        }
-
-        $attr_name = $attr_selector_map[$attr_suffix];
-        $attr_name_regex = preg_quote($attr_name, '@');
-        if (preg_match_all('@' . $attr_name_regex . '\=([\'\"])(?<attr>([\w\-]+\s*)+)\1@i', $svg_match[0], $attr_matches)) {
-          $attr_replacements = [];
-          foreach ($attr_matches['attr'] as $a => $attr_match) {
-            $attr_replacements[$attr_matches[0][$a]] =  $attr_name . '="' . strtr($attr_match, $attr_replacement) . '"';
+          if (str_starts_with($selector, '.')) {
+            // Replace root classes.
+            if (preg_match('@^(?<prefix>[\.])(?<name>[\w\-]+)@', $selector, $selector_matches)) {
+              $new_selector_name = "{$selector_matches['name']}-{$svg_id}";
+              $class_replacements[$selector_matches['name']] = $new_selector_name;
+              return "{$selector_matches['prefix']}{$new_selector_name} {$style_match['styles']}";
+            }
+          }
+          elseif (str_starts_with($selector, '#')) {
+            // Allow root ID selectors since IDs have been scoped above already.
+            return $style_match[0];
           }
 
-          $svg_new = strtr($svg_new, $attr_replacements);
+          // Remove the style by default.
+          return '';
+        }, $new_style);
+
+        // Replace classes in any element.
+        if ($class_replacements) {
+          foreach ($xpath->query('//*[@class]', $svg) as $node_with_class) {
+            if (!($node_with_class instanceof \DOMElement)) {
+              continue;
+            }
+
+            $original_class_attr = $node_with_class->getAttribute('class');
+            if (!$original_class_attr) {
+              continue;
+            }
+
+            $classes = array_map('trim', explode(' ', $original_class_attr));
+            foreach (array_keys($classes) as $class_key) {
+              if (isset($class_replacements[$classes[$class_key]])) {
+                $classes[$class_key] = $class_replacements[$classes[$class_key]];
+              }
+            }
+
+            $new_class_attr = implode(' ', $classes);
+            if ($new_class_attr !== $original_class_attr) {
+              $node_with_class->setAttribute('class', $new_class_attr);
+            }
+          }
         }
+
+        $style->nodeValue = $new_style;
       }
+    }
 
-      return $svg_new;
-    }, $svg_markup);
-
-    return $svg_scoped;
+    $svg_scoped = $dom->saveXML($dom);
+    return $svg_scoped ?: $svg_original;
   }
 
 }

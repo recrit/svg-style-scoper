@@ -18,11 +18,11 @@ The style tag ["scoped"](https://developer.mozilla.org/en-US/docs/Web/HTML/Eleme
 
 This library alters the SVG styles so that they only apply to the contents within the SVG.
 
-- All style declarations within the SVG's style tag are appended with a hash. 
+- All style declarations within the SVG's style tag are appended with a hash. Specifically, only styles that start with a class and ID based styles. See below for all alterations to the SVG styles.
 - The appended hash makes the styles unique to the SVG and any other placement of the exact same inline SVG displayed on the page.
 - The appended hash preserves the original CSS selector specificity. Keeping the same specificity lets any page level styles (not in the SVG) to continue to work as expected. Page level style example: a site's theme changing the color of the SVG path.
 
-### Example alterations to the SVG styles
+### Alterations to the SVG styles
 
 |#| Original CSS   | Altered CSS | Updated SVG inner element attributes|Goal|
 | ----------- | ----------- | ----------- | ----------- | ----------- |
